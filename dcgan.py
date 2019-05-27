@@ -1,12 +1,12 @@
-from keras.layers import Input, Dense, Reshape, Flatten, Dropout
-from keras.layers import BatchNormalization, Activation, ZeroPadding2D
-from keras.layers.advanced_activations import LeakyReLU
-from keras.layers.convolutional import UpSampling2D, Conv2D
-from keras.models import Sequential, Model
-from keras.optimizers import Adam
-from keras.utils import np_utils
 import tensorflow as tf
-from keras.backend import tensorflow_backend
+from tensorflow.keras.layers import Input, Dense, Reshape, Flatten, Dropout
+from tensorflow.keras.layers import BatchNormalization, Activation, ZeroPadding2D
+from tensorflow.keras.layers import LeakyReLU
+from tensorflow.keras.layers import UpSampling2D, Conv2D
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.backend import set_session
 
 import matplotlib.pyplot as plt
 import os
@@ -19,9 +19,9 @@ tf.set_random_seed(0)
 
 config = tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True))
 session = tf.Session(config=config)
-tensorflow_backend.set_session(session)
+set_session(session)
 
-root_dir = "/home/takusub/PycharmProjects/Samples/dcgan/kill_me_baby_datasets/"
+root_dir = "./kill_me_baby_datasets/"
 
 
 class DCGAN():
@@ -200,7 +200,7 @@ class DCGAN():
     def get_class_one_hot(self, class_str):
         label_encoded = self.class_names.index(class_str)
 
-        label_hot = np_utils.to_categorical(label_encoded, len(self.class_names))
+        label_hot = to_categorical(label_encoded, len(self.class_names))
         label_hot = label_hot
 
         return label_hot

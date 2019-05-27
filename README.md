@@ -5,10 +5,15 @@ https://qiita.com/taku-buntu/items/0093a68bfae0b0ff879d
 # Usage
 Before you run dcgan.py, you need to unrar kill_me_baby_datasets.rar. 
 And it needs you to install pandas, numpy, tensorflow, keras, opencv3, matplotlib in advanced. 
-And we implemented this codes in tensorflow1.6.0. 
+And we implemented this codes in tensorflow1.13.1. 
 
 ```
-unrar kill_me_baby_datasets.rar
+source mkvenv.src.sh
+pip install opencv_python
+pip install tensorflow
+pip install matplotlib
+
+unrar x kill_me_baby_datasets.rar
 python3 dcgan.py
 ```
 
