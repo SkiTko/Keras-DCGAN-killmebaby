@@ -35,7 +35,8 @@ class DCGAN():
         optimizer = Adam(lr=0.0002, beta_1=0.5)
 
         self.discriminator = self.build_discriminator()
-        self.discriminator.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+        self.discriminator.compile(
+            loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
         self.generator = self.build_generator()
         # self.generator.compile(loss='binary_crossentropy', optimizer=optimizer)
@@ -55,7 +56,8 @@ class DCGAN():
 
         model = Sequential()
 
-        model.add(Dense(128 * 32 * 32, activation="relu", input_shape=noise_shape))
+        model.add(Dense(128 * 32 * 32, activation="relu",
+                        input_shape=noise_shape))
         model.add(Reshape((32, 32, 128)))
         model.add(BatchNormalization(momentum=0.8))
         model.add(UpSampling2D())
@@ -81,7 +83,8 @@ class DCGAN():
 
         model = Sequential()
 
-        model.add(Conv2D(32, kernel_size=3, strides=2, input_shape=img_shape, padding="same"))
+        model.add(Conv2D(32, kernel_size=3, strides=2,
+                         input_shape=img_shape, padding="same"))
         model.add(LeakyReLU(alpha=0.2))
         model.add(Dropout(0.25))
         model.add(Conv2D(64, kernel_size=3, strides=2, padding="same"))
@@ -134,8 +137,10 @@ class DCGAN():
 
             gen_imgs = self.generator.predict(noise)
 
-            d_loss_real = self.discriminator.train_on_batch(imgs, np.ones((half_batch, 1)))
-            d_loss_fake = self.discriminator.train_on_batch(gen_imgs, np.zeros((half_batch, 1)))
+            d_loss_real = self.discriminator.train_on_batch(
+                imgs, np.ones((half_batch, 1)))
+            d_loss_fake = self.discriminator.train_on_batch(
+                gen_imgs, np.zeros((half_batch, 1)))
 
             d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
 
@@ -145,18 +150,22 @@ class DCGAN():
 
             noise = np.random.uniform(-1, 1, (batch_size, self.z_dim))
 
-            g_loss = self.combined.train_on_batch(noise, np.ones((batch_size, 1)))
+            g_loss = self.combined.train_on_batch(
+                noise, np.ones((batch_size, 1)))
 
-            print("%d [D loss: %f, acc.: %.2f%%] [G loss: %f]" % (iteration, d_loss[0], 100 * d_loss[1], g_loss))
+            print("%d [D loss: %f, acc.: %.2f%%] [G loss: %f]" %
+                  (iteration, d_loss[0], 100 * d_loss[1], g_loss))
 
             if iteration % save_interval == 0:
                 self.save_imgs(iteration, check_noise, r, c)
                 start = np.expand_dims(check_noise[0], axis=0)
                 end = np.expand_dims(check_noise[1], axis=0)
                 resultImage = self.visualizeInterpolation(start=start, end=end)
-                cv2.imwrite("images/latent/" + "latent_{}.png".format(iteration), resultImage)
+                cv2.imwrite("images/latent/" +
+                            "latent_{}.png".format(iteration), resultImage)
                 if iteration % model_interval == 0:
-                    self.generator.save("ganmodels/dcgan-{}-iter.h5".format(iteration))
+                    self.generator.save(
+                        "ganmodels/dcgan-{}-iter.h5".format(iteration))
 
     def save_imgs(self, iteration, check_noise, r, c):
         noise = check_noise
@@ -184,7 +193,8 @@ class DCGAN():
         for cl_name in self.class_names:
             img_names = os.listdir(os.path.join(root_dir, cl_name))
             for img_name in img_names:
-                img_paths.append(os.path.abspath(os.path.join(root_dir, cl_name, img_name)))
+                img_paths.append(os.path.abspath(
+                    os.path.join(root_dir, cl_name, img_name)))
                 hot_cl_name = self.get_class_one_hot(cl_name)
                 labels.append(hot_cl_name)
 
@@ -212,8 +222,8 @@ class DCGAN():
         latentStart = start
         latentEnd = end
 
-        startImg = self.generator.predict(latentStart)
-        endImg = self.generator.predict(latentEnd)
+        # startImg = self.generator.predict(latentStart)
+        # endImg = self.generator.predict(latentEnd)
 
         vectors = []
 
@@ -224,7 +234,7 @@ class DCGAN():
 
         vectors = np.array(vectors)
 
-        resultLatent = None
+        # resultLatent = None
         resultImage = None
 
         for i, vec in enumerate(vectors):
@@ -232,7 +242,8 @@ class DCGAN():
             gen_img = (0.5 * gen_img + 0.5) * 255
             interpolatedImage = cv2.cvtColor(gen_img, cv2.COLOR_RGB2BGR)
             interpolatedImage = interpolatedImage.astype(np.uint8)
-            resultImage = interpolatedImage if resultImage is None else np.hstack([resultImage, interpolatedImage])
+            resultImage = interpolatedImage if resultImage is None else np.hstack(
+                [resultImage, interpolatedImage])
 
         return resultImage
 
