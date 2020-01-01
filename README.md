@@ -1,19 +1,19 @@
 # Killme_DCGAN
-Generate "Kill me baby" images by DCGAN
-https://qiita.com/taku-buntu/items/0093a68bfae0b0ff879d
 
-# Usage
-Before you run dcgan.py, you need to unrar kill_me_baby_datasets.rar. 
-And it needs you to install pandas, numpy, tensorflow, keras, opencv3, matplotlib in advanced. 
-And we implemented this codes in tensorflow1.13.1. 
+## License
 
-```
-source mkvenv.src.sh
-pip install opencv_python
-pip install tensorflow
-pip install matplotlib
+This software is released under the MIT License, see [license.txt](license.txt).
 
-unrar x kill_me_baby_datasets.rar
+## Introduction
+
+Generate "Kill me baby" images by DCGAN  
+[GANについて概念から実装まで　～DCGANによるキルミーベイベー生成～](https://qiita.com/taku-buntu/items/0093a68bfae0b0ff879d)
+
+## Usage
+And it needs you to install pandas, numpy, tensorflow, keras, opencv3, matplotlib, rarfile in advanced. 
+And we implemented this codes in tensorflow1.6.0. 
+
+```console
 python3 dcgan.py
 ```
 
